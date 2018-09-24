@@ -13,7 +13,7 @@ class DataReceiver():
         self.buff_size = buff_size
 
     def receive(self):
-        package =[]
+        package = bytearray()
 
         if self.socket.recv(2) == b'RS':
             self.socket.send(b'sx')
@@ -23,16 +23,13 @@ class DataReceiver():
             while len(package) != buff:
                 data = self.socket.recv(1)
                 if data:
-                    package.append(data)
-
-            message = (b''.join(package))
+                    package.extend(data)
             recv_hash = hashlib.md5()
-            recv_hash.update(message)
-            print("DataReceiver(): receive hash: " + str(recv_hash) + ' bytes received: ' + str(message))
+            recv_hash.update(package)
+            print("DataReceiver(): receive hash: " + str(recv_hash) + ' bytes received: ' + str(package))
             self.socket.send(recv_hash.digest())
 
         return package
-
 
 
 class DataSender():
@@ -55,17 +52,7 @@ class DataSender():
                 # check hash
                 client_hash = self.socket.recv(16)
 
-
                 if client_hash == byte_array_hash.digest():
                     print("DataSender(): Success!")
                 else:
                     print("DataSender(): Failure. Hash received: " + str(byte_array_hash) + ' bytes sent: ' + str(bytes_like_obj))
-
-
-if __name__ == '__main__':
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('', 6000))
-    sock.listen()
-    conn, client_ip = sock.accept()
-    dr = DataReceiver(conn)
-    dr.receive()
