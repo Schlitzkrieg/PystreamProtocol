@@ -1,5 +1,5 @@
 import hashlib
-import socket
+from socket import socket
 
 class DataMessage():
     def __init__(self):
@@ -8,11 +8,11 @@ class DataMessage():
         self.message_content = None
 
 class DataReceiver():
-    def __init__(self, socket, buff_size=1024):
+    def __init__(self, socket, buff_size: int=1024) -> None:
         self.socket = socket
         self.buff_size = buff_size
 
-    def receive(self):
+    def receive(self) -> bytearray:
         package = bytearray()
 
         if self.socket.recv(2) == b'RS':
@@ -33,10 +33,10 @@ class DataReceiver():
 
 
 class DataSender():
-    def __init__(self, socket):
+    def __init__(self, socket: socket) -> None:
         self.socket = socket
 
-    def send(self, bytes_like_obj):
+    def send(self, bytes_like_obj: bytes) -> bool:
         byte_array_hash = hashlib.md5()
         byte_array_hash.update(bytes_like_obj)
         # I am Ready to send
