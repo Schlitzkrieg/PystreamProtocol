@@ -32,7 +32,7 @@ class DataReceiver():
         return package
 
 
-class DataSender():
+class DataSender:
     def __init__(self, socket: socket) -> None:
         self.socket = socket
 
