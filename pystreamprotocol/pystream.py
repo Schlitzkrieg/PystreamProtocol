@@ -36,7 +36,7 @@ class DataSender():
     def __init__(self, socket: socket) -> None:
         self.socket = socket
 
-    def send(self, bytes_like_obj: bytes) -> bool:
+    def send(self, bytes_like_obj: bytes) -> None:
         byte_array_hash = hashlib.md5()
         byte_array_hash.update(bytes_like_obj)
         # I am Ready to send
@@ -55,4 +55,7 @@ class DataSender():
                 if client_hash == byte_array_hash.digest():
                     print("DataSender(): Success!")
                 else:
-                    print("DataSender(): Failure. Hash received: " + str(byte_array_hash) + ' bytes sent: ' + str(bytes_like_obj))
+                    print(
+                        "DataSender(): Failure. Hash received: " + str(byte_array_hash) +
+                        ' bytes sent: ' + str(bytes_like_obj)
+                    )
